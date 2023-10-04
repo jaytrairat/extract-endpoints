@@ -7,9 +7,17 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/spf13/cobra"
 )
 
-func main() {
+var rootCmd = &cobra.Command{
+	Use:   "extract-endpoints",
+	Short: "Search for ws and wss in string",
+	Run:   runSearch,
+}
+
+func runSearch(cmd *cobra.Command, args []string) {
 	searchStrs := []string{"ws://", "wss://"}
 	file, err := os.Create("result.txt")
 	if err != nil {
@@ -46,4 +54,11 @@ func main() {
 	})
 
 	fmt.Printf("%s :: file created\n", time.Now().Format("2006-01-02 15:04:05"))
+}
+
+func main() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
